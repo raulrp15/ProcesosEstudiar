@@ -4,6 +4,10 @@ from flask import *
 from flask_jwt_extended import JWTManager
 # Importo el Blueprint de juegos
 from app.Juegos.routes import juegosBP
+# Importo el Blueprint de pegi
+from app.Pegi.routes import pegisBP
+# Importo el Blueprint de users
+from app.Users.routes import usersBP
 
 # Importo secrets para generar una criptografia segura
 import secrets
@@ -19,7 +23,7 @@ app = Flask(__name__)
  Configuro el token de la app 
  para que no sea la misma cada vez que se inicie
 '''
-app.config['JWT_SECRET_KET'] = secrets.token_hex(16)
+app.config['JWT_SECRET_KEY'] = secrets.token_hex(16)
 
 ''' Se guarda en una variable el token '''
 jwt = JWTManager(app)
@@ -29,5 +33,5 @@ jwt = JWTManager(app)
  Facilita el manejo de las URLs de la pagina
 '''
 app.register_blueprint(juegosBP, url_prefix='/juegos')
-app.register_blueprint(pegiBP, url_prefix='/pegi')
+app.register_blueprint(pegisBP, url_prefix='/pegis')
 app.register_blueprint(usersBP, url_prefix='/usuarios')

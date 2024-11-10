@@ -76,3 +76,32 @@ def add_game():
  Return -> Json del juego modificado, codigo de estado VALIDO
  Return -> Json con mensaje de error, codigo de estado ERROR
 '''
+@juegosBP.put('/<int:id>')
+@juegosBP.patch('/<int:id>')
+@jwt_required()
+def update_game(id):
+    juegos = leer_fichero(ruta_juegos)
+    if request.is_json:
+        juegoAct = request.get_json()
+        for juego in juegos:
+            if juego['id'] == id:
+                juego.update(juegoAct)
+                escribir_fichero(ruta_juegos, juegos)
+                return juego, 200
+        return {'error': 'Juego no encontrado'}, 404
+
+'''
+ Creo un metodo para borrar un juego mediante su ID
+ Return -> Json del juego borrado, codigo de estado VALIDO
+ Return -> Json con mensaje de error, codigo de estado ERROR
+'''
+@juegosBP.delete('/<int:id>')
+@jwt_required()
+def delete_game(id):
+    juegos = leer_fichero(ruta_juegos)
+    for juego in juegos:
+        if juego['id'] == id:
+            juegos.remove(juego)
+            escribir_fichero(ruta_juegos, juegos)
+            return '{}', 200
+    return {'error': 'Juego no encontrado'}, 404
